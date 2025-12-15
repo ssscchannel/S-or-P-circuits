@@ -70,27 +70,29 @@
 
             /* 2. 模擬器容器：鎖定寬度，改用「縮放」方式適應螢幕 */
             .simulation-container { 
-                width: 500px;       /* ★關鍵：強制維持 500px 寬度，確保內部座標不跑位 */
+                min-width: 500px;
+				width: 500px;       /* ★關鍵：強制維持 500px 寬度，確保內部座標不跑位 */
                 height: 450px;      /* 維持原本高度 */
                 
                 /* 縮放魔法：讓大容器縮小來適應手機 */
-                transform: scale(0.68); 
+                transform: scale(0.65; 
                 transform-origin: top center; /* 從上方中間開始縮放 */
                 
                 /* 因為縮放後下方會留白，把下面拉上來 */
-                margin-bottom: -130px; 
+                margin-bottom: -150px; 
             } 
             
             /* 3. 內部場景：取消原本的縮放，因為外面已經縮過了 */
             .circuit-scene { 
                 transform: none; 
                 height: 100%;
+				width: 100%;
             } 
 
             /* 4. 控制按鈕：也要跟著一起縮放，不然會凸出去 */
             .controls { 
                 width: 500px;       /* 鎖定寬度 */
-                transform: scale(0.68);
+                transform: scale(0.65);
                 transform-origin: top center;
                 margin-top: 10px;
             }
@@ -98,6 +100,7 @@
             /* 5. 說明面板：微調位置 */
             .info-panel {
                 width: 85%; /* 稍微縮窄一點避免太貼邊 */
+				font-size: 0.9rem; /* 手機上字稍微大一點點比較好讀 */
             }
 			/* 手機版才顯示換行  */
             .mobile-break { display: block; }
@@ -643,3 +646,4 @@
 </body>
 
 </html>
+
