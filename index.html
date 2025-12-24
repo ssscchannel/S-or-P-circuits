@@ -14,11 +14,11 @@
             --bulb-norm-color: #f1c40f;
             --bulb-bright-color: #fff700;
             
-            /* 新增/同步 UI 用變數 */
-            --bg-color: #f0f4f8; /* 配合 index.html 的色調 */
+            /* UI 用變數 */
+            --bg-color: #f0f4f8; 
         }
 
-        /* --- 3. 背景鎖定技術 (源自 index.html) --- */
+        /* --- 背景鎖定技術 --- */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
@@ -29,12 +29,12 @@
             margin: 0;
             overflow-x: hidden;
             min-height: 100vh;
-            position: relative; /* 建立定位基準 */
+            position: relative; 
         }
 
         body::before {
             content: "";
-            position: fixed; /* 強制固定背景，不隨內容滾動 */
+            position: fixed; 
             top: 0; 
             left: 0; 
             width: 100%; 
@@ -43,10 +43,10 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            z-index: -1; /* 置於內容最底層 */
+            z-index: -1; 
         }
 
-        /* --- 標題區塊 (同步 index.html 風格) --- */
+        /* --- 標題區塊 (優化換行) --- */
         .header-container { 
             display: flex; align-items: center; justify-content: center;   
             gap: 10px; margin-top: 15px; margin-bottom: 10px;
@@ -55,17 +55,20 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             max-width: 600px; width: 95%; 
             box-sizing: border-box;
-            flex-wrap: nowrap; /* 保持單行，若太窄再由 RWD 處理 */
+            /* 手機版允許換行，但保持置中 */
+            flex-wrap: wrap; 
         }
         
-        .title-logo { height: 36px; width: auto; } /* 同步 index.html 大小 */
+        .title-logo { height: 36px; width: auto; } 
         
         h1 { 
             margin: 0; 
             color: #2c3e50; 
-            font-size: 1.2rem; /* 同步字體大小 */
+            font-size: 1.2rem; 
             text-align: center; 
+            /* 預設不換行，手機版會覆寫此規則 */
             white-space: nowrap; 
+            line-height: 1.3;
         }
 
         /* 副標題樣式 */
@@ -77,7 +80,7 @@
             margin-top: 0;
         }
 
-        /* --- 1. 外部連結按鈕 (源自 index.html) --- */
+        /* --- 外部連結按鈕 --- */
         .external-link-btn {
             display: flex;
             align-items: center;
@@ -105,7 +108,7 @@
             transform: scale(0.98);
         }
 
-        /* --- 以下保持原有電路模擬 CSS (Simulation Container & Components) --- */
+        /* --- 模擬容器 --- */
         .simulation-container {
             position: relative;
             width: 500px; height: 450px;
@@ -205,7 +208,7 @@
         .polarity { position: absolute; font-size: 14px; font-weight: bold; color: #7f8c8d; pointer-events: none; z-index: 15; }
         .p-pos { color: #e74c3c; } .p-neg { color: #3498db; }
 
-        /* 說明面板 */
+        /* 說明面板 (優化文字排版) */
         .info-panel {
             position: absolute;
             bottom: 15px;
@@ -213,7 +216,7 @@
             transform: translateX(-50%);
             background: #ecf0f1;
             width: 90%;
-            padding: 10px;
+            padding: 12px 15px; /* 增加內距，讓文字不擁擠 */
             border-radius: 10px;
             text-align: center;
             border-left: 5px solid #3498db;
@@ -222,9 +225,14 @@
             flex-direction: column;
             justify-content: center;
             z-index: 20;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05); /* 增加輕微陰影增加層次 */
         }
         .info-title { font-weight: bold; color: #2980b9; margin-bottom: 5px; display: block;}
-        .info-text { font-size: 0.95rem; line-height: 1.4; color: #555; }
+        .info-text { 
+            font-size: 0.95rem; 
+            line-height: 1.5; /* 增加行高，提升閱讀舒適度 */
+            color: #555; 
+        }
 
         /* 控制區 */
         .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 500px; margin-top: 10px; margin-bottom: 30px;}
@@ -232,15 +240,46 @@
         .btn:hover { filter: brightness(1.1); }
         .btn.active { background: #3498db; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transform: translateY(1px); }
         
-        /* --- RWD (結合 index.html 風格與原電路需求) --- */
+        /* --- RWD 手機版優化 --- */
         @media (max-width: 600px) {
-            h1 { font-size: 1.1rem; white-space: normal; } /* 手機標題可換行以適應窄螢幕 */
-            .title-logo { height: 28px; } /* 手機版 Logo 縮小 */
+            /* 1. 標題優化：允許換行，稍微縮小字體以適應寬度 */
+            h1 { 
+                font-size: 1.1rem; 
+                white-space: normal; /* 允許自動換行 */
+                line-height: 1.3; 
+            } 
+            .title-logo { height: 28px; }
             
-            .simulation-container { width: 95%; height: 400px; } 
+            /* 2. 電路圖自動符合修正 (關鍵技術) */
+            .simulation-container { 
+                width: 95%; /* 容器佔滿手機寬度 */
+                height: 380px; /* 高度微調 */
+            } 
+            
+            .circuit-scene { 
+                /* ★ 強制鎖定寬度為電腦版尺寸，確保絕對定位不跑版 */
+                width: 500px; 
+                
+                /* ★ 絕對置中大法 */
+                position: absolute;
+                left: 50%;
+                margin-left: -250px; /* 向左回拉一半寬度 */
+                
+                /* ★ 等比例縮小，讓 500px 的內容塞進手機螢幕 */
+                transform: scale(0.68); 
+                transform-origin: top center; 
+                top: 20px; /* 稍微往下推一點 */
+            } 
+
+            /* 3. 說明文字優化：寬度調整 */
+            .info-panel { 
+                width: 85%; /* 左右留白多一點 */
+                bottom: 10px;
+                padding: 10px 15px;
+            }
+            .info-text { font-size: 0.9rem; } /* 手機字體微調 */
+            
             .controls { width: 95%; }
-            .circuit-scene { transform: scale(0.75); transform-origin: top center; height: 340px;} 
-            .info-panel { margin-top: 0; }
         }
 
     </style>
